@@ -1,2 +1,2 @@
 # mail-check
-simply mail check app
+Simple mail check app

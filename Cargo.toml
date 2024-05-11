@@ -1,0 +1,22 @@
+[package]
+name = "mail-check"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+imap = { git = "https://github.com/jonhoo/rust-imap", default-features = false, features = ["native-tls"] }
+notify-rust = { version = "4.11.0", default-features = false, features = ["dbus"] }
+keyring = { version = "2", default-features = false, features = ["linux-secret-service"] }
+toml = { version = "0.8" }
+serde = { version = "1", default-features = false }
+rpassword = { version = "7" }
+clap = { version = "4", features = ["derive"] }
+
+[profile.release]
+debug = false
+opt-level = 3
+rpath = false
+lto = true
+debug-assertions = false
+overflow-checks = false
+strip = "debuginfo"
