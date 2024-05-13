@@ -65,18 +65,17 @@ impl Manager {
         }
     }
 
-    // будем возвращать список из учётки и количества непрочитанных
-    pub fn check(&self) -> Vec<(String, u32)> {
-        let mut result = Vec::new();
+    pub fn check(&self) -> u32 {
+        let mut total_unread = 0;
         for account in &self.accounts {
             println!("check {}", account.login);
             let entry = Entry::new(consts::APPNAME, &account.login).unwrap();
             let password = entry.get_password().unwrap();
             let mut mail = Mail::connect(&account.domain, account.port, &account.login, &password);
             let count = mail.check();
-            println!("have {count} new message(s)");
-            result.push((account.login.clone(), count));
+            println!("{} have {count} new message(s)", account.login);
+            total_unread += count;
         }
-        result
+        total_unread
     }
 }
