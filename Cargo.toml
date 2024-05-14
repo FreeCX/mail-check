@@ -6,9 +6,9 @@ edition = "2021"
 [dependencies]
 imap = { git = "https://github.com/jonhoo/rust-imap", default-features = false, features = ["native-tls"] }
 notify-rust = { version = "4.11.0", default-features = false, features = ["dbus"] }
-keyring = { version = "2", default-features = false, features = ["linux-secret-service"] }
+keyring = { version = "2", default-features = false, features = ["linux-secret-service-rt-tokio-crypto-openssl"] }
 toml = { version = "0.8" }
-serde = { version = "1", default-features = false }
+serde = { version = "1", default-features = false, features = ["serde_derive"] }
 rpassword = { version = "7" }
 clap = { version = "4", features = ["derive"] }
 
