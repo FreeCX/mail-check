@@ -1,6 +1,7 @@
 use std::{
     net::{TcpStream, ToSocketAddrs},
-    thread, time,
+    thread,
+    time::{self, Duration},
 };
 
 use notify_rust::Notification;
@@ -8,12 +9,12 @@ use notify_rust::Notification;
 use crate::consts;
 use crate::manager::Manager;
 
-fn is_online() -> bool {
+fn is_online(timeout: Duration) -> bool {
     let addr = match "detectportal.firefox.com:80".to_socket_addrs() {
         Ok(value) => value.into_iter().next().unwrap(),
         Err(_) => return false,
     };
-    match TcpStream::connect_timeout(&addr, time::Duration::from_secs(3)) {
+    match TcpStream::connect_timeout(&addr, timeout) {
         Ok(_) => true,
         Err(_) => false,
     }
@@ -31,18 +32,19 @@ fn notify_message(msg: &str) {
 }
 
 pub fn default(manager: Manager) {
+    let tcp_timeout = time::Duration::from_secs(manager.config.tcp_timeout_secs);
+    let online_wait = time::Duration::from_secs(manager.config.online_wait_secs);
     let mut no_connection = true;
-    let try_count = 3;
 
     println!("check internet connection");
-    for _ in 0..try_count {
-        if is_online() {
+    for _ in 0..manager.config.retry_count {
+        if is_online(tcp_timeout) {
             println!("online");
             no_connection = false;
             break;
         }
         println!("wait and try again...");
-        thread::sleep(time::Duration::from_secs(1));
+        thread::sleep(online_wait);
     }
 
     if no_connection {

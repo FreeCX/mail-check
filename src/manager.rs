@@ -15,8 +15,22 @@ pub struct Account {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct Config {
+    pub tcp_timeout_secs: u64,
+    pub online_wait_secs: u64,
+    pub retry_count: u8,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Manager {
+    pub config: Config,
     accounts: Vec<Account>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Config { tcp_timeout_secs: 3, online_wait_secs: 3, retry_count: 3 }
+    }
 }
 
 impl Manager {
@@ -28,7 +42,7 @@ impl Manager {
             Ok(raw) => toml::from_str(&raw).unwrap(),
             Err(err) => {
                 println!("error: {err}");
-                Manager { accounts: Vec::new() }
+                Manager { config: Config::default(), accounts: Vec::new() }
             }
         }
     }
