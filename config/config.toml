@@ -1,0 +1,4 @@
+[config]
+tcp_timeout_secs = 3
+online_wait_secs = 5
+retry_count = 3
