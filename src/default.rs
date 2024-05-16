@@ -4,7 +4,7 @@ use std::{
     time::{self, Duration},
 };
 
-use notify_rust::Notification;
+use notify_rust::{Notification, NotificationHandle};
 
 use crate::consts;
 use crate::manager::Manager;
@@ -20,18 +20,17 @@ fn is_online(timeout: Duration) -> bool {
     }
 }
 
-fn notify_message(msg: &str) {
-    Notification::new()
+fn notify_message(msg: &str) -> anyhow::Result<NotificationHandle> {
+    Ok(Notification::new()
         .summary("Mail Check")
         .body(msg)
         .icon("mail-message-new")
         .appname(consts::APPNAME)
         .timeout(0)
-        .show()
-        .unwrap();
+        .show()?)
 }
 
-pub fn default(manager: Manager) {
+pub fn default(manager: Manager) -> anyhow::Result<()> {
     let tcp_timeout = time::Duration::from_secs(manager.config.tcp_timeout_secs);
     let online_wait = time::Duration::from_secs(manager.config.online_wait_secs);
     let mut no_connection = true;
@@ -49,12 +48,16 @@ pub fn default(manager: Manager) {
 
     if no_connection {
         println!("no connection");
-        notify_message("No internet :(");
-        return;
+        if manager.config.show_no_internet_msg {
+            notify_message("No internet :(")?;
+        }
+        return Ok(());
     }
 
-    let total_unread = manager.check();
+    let total_unread = manager.check()?;
     if total_unread > 0 {
-        notify_message(&format!("You have {total_unread} unreaded messages!"));
+        notify_message(&format!("You have {total_unread} unreaded messages!"))?;
     }
+
+    Ok(())
 }

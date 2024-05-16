@@ -11,6 +11,7 @@ toml = { version = "0.8" }
 serde = { version = "1", default-features = false, features = ["serde_derive"] }
 rpassword = { version = "7" }
 clap = { version = "4", features = ["derive"] }
+anyhow = "1.0.83"
 
 [profile.release]
 debug = false
