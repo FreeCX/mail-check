@@ -1,3 +1,5 @@
+use std::process::ExitCode;
+
 use clap::Parser;
 
 mod cli;
@@ -5,11 +7,11 @@ mod consts;
 mod default;
 mod mail;
 mod manager;
+mod notify;
+mod online;
 
-fn main() -> anyhow::Result<()> {
-    let args = cli::Cli::parse();
+fn app(args: cli::Cli) -> anyhow::Result<()> {
     let mut manager = manager::Manager::load(&args.config)?;
-
     match &args.command {
         Some(cli::Commands::Add { login, domain, port }) => {
             manager.add_account(login, domain, *port)?;
@@ -20,5 +22,16 @@ fn main() -> anyhow::Result<()> {
             manager.save(&args.config)
         }
         None => default::default(manager),
+    }
+}
+
+fn main() -> ExitCode {
+    match app(cli::Cli::parse()) {
+        Err(error) => {
+            eprintln!("error: {}, reason: {}", error, error.root_cause());
+            let _ = notify::message(&error.to_string());
+            ExitCode::FAILURE
+        }
+        Ok(_) => ExitCode::SUCCESS,
     }
 }

@@ -60,7 +60,7 @@ impl Manager {
         I: Into<String>,
     {
         let login = login.into();
-        let entry = Entry::new(consts::APPNAME, &login)?;
+        let entry = Entry::new(consts::APP_NAME, &login)?;
 
         if entry.get_password().is_ok() {
             return Err(anyhow::anyhow!("Account {login} already exists in keyring"));
@@ -81,7 +81,7 @@ impl Manager {
             .map_err(|_| anyhow::anyhow!("Login {login} not found in keyring"))?;
         let account = self.accounts.swap_remove(index);
 
-        let entry = Entry::new(consts::APPNAME, &account.login)?;
+        let entry = Entry::new(consts::APP_NAME, &account.login)?;
         let _ = entry.delete_password();
 
         Ok(())
@@ -92,7 +92,7 @@ impl Manager {
         for account in &self.accounts {
             println!("check {}", account.login);
 
-            let entry = Entry::new(consts::APPNAME, &account.login)?;
+            let entry = Entry::new(consts::APP_NAME, &account.login)?;
             let password = entry.get_password().with_context(|| "Failed to get password from keyring")?;
 
             let mut mail = Mail::connect(&account.domain, account.port, &account.login, &password)?;
