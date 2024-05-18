@@ -27,6 +27,7 @@ pub struct Config {
 #[derive(Default, Serialize, Deserialize)]
 pub struct Manager {
     pub config: Config,
+    #[serde(default = "Vec::default")]
     accounts: Vec<Account>,
 }
 
