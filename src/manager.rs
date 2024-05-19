@@ -43,7 +43,7 @@ impl Manager {
         P: AsRef<Path> + Debug + Copy,
     {
         let raw = fs::read_to_string(config).with_context(|| format!("Failed to load {config:?} file"))?;
-        Ok(toml::from_str(&raw).with_context(|| "Failed to parse config")?)
+        toml::from_str(&raw).with_context(|| "Failed to parse config")
     }
 
     pub fn save<P>(&mut self, config: P) -> anyhow::Result<()>

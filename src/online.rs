@@ -10,8 +10,5 @@ pub fn is_online(timeout: Duration) -> bool {
         Ok(value) => value.into_iter().next().unwrap(),
         Err(_) => return false,
     };
-    match TcpStream::connect_timeout(&addr, timeout) {
-        Ok(_) => true,
-        Err(_) => false,
-    }
+    TcpStream::connect_timeout(&addr, timeout).is_ok()
 }
