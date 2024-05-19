@@ -19,7 +19,7 @@ $ mail-check -c config.toml
 $ mail-check -c config.toml remove --login "user@example.com"
 ```
 
-## Using as service
+## Scheduled launch
 See [mail-check.service](./config/mail-check.service) and [mail-check.timer](./config/mail-check.timer).
 
 # License
