@@ -3,3 +3,5 @@ tcp_timeout_secs = 3
 online_wait_secs = 5
 retry_count = 3
 show_no_internet_msg = true
+action_run = "thunderbird"
+action_name = "Run thunderbird"

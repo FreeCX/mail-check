@@ -22,6 +22,8 @@ pub struct Config {
     pub online_wait_secs: u64,
     pub retry_count: u8,
     pub show_no_internet_msg: bool,
+    pub action_run: Option<String>,
+    pub action_name: String,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -33,7 +35,14 @@ pub struct Manager {
 
 impl Default for Config {
     fn default() -> Self {
-        Config { tcp_timeout_secs: 3, online_wait_secs: 3, retry_count: 3, show_no_internet_msg: true }
+        Config {
+            tcp_timeout_secs: 3,
+            online_wait_secs: 3,
+            retry_count: 3,
+            show_no_internet_msg: true,
+            action_run: None,
+            action_name: "Run email app".to_string(),
+        }
     }
 }
 

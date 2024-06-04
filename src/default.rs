@@ -31,7 +31,12 @@ pub fn default(manager: Manager) -> anyhow::Result<()> {
 
     let total_unread = manager.check()?;
     if total_unread > 0 {
-        notify::message(&format!("You have {total_unread} unreaded messages!"))?;
+        let message = format!("You have {total_unread} unreaded messages!");
+        if let Some(app) = manager.config.action_run {
+            notify::message_with_action(&message, &app, &manager.config.action_name)?;
+        } else {
+            notify::message(&message)?;
+        }
     }
 
     Ok(())
