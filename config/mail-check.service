@@ -3,3 +3,7 @@ Description=Mail Checking Service
 
 [Service]
 ExecStart=%h/.local/bin/mail-check -c %h/.config/mail-check/config.toml
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
