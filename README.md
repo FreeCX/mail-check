@@ -18,6 +18,19 @@ $ mail-check -c config.toml
 ```bash
 $ mail-check -c config.toml remove --login "user@example.com"
 ```
+5. (optional) update account password
+```bash
+$ mail-check -c config.toml update --login "user@example.com"
+```
+
+## Available commands
+- `add` -- add account for checking
+- `update` -- update password for account
+- `remove` -- remove account
+- `show` -- show all configured accounts
+- `check` -- check all mailboxes
+
+For details, see the `--help`.
 
 ## Scheduled launch
 See [mail-check.service](./config/mail-check.service) and [mail-check.timer](./config/mail-check.timer).
