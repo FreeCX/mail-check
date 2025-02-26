@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use crate::consts;
 use crate::mail::Mail;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, PartialEq, Eq)]
 pub struct Account {
     login: String,
     domain: String,
@@ -85,14 +85,17 @@ impl Manager {
     }
 
     pub fn remove_account(&mut self, login: &String) -> anyhow::Result<()> {
-        let index = self
+        let account = self
             .accounts
-            .binary_search_by(|item| item.login.cmp(login))
-            .map_err(|_| anyhow::anyhow!("Login {login} not found in keyring"))?;
-        let account = self.accounts.swap_remove(index);
+            .iter()
+            .find(|&item| item.login.cmp(login).is_eq())
+            .ok_or(anyhow::anyhow!("Login {login} not found in keyring"))?;
 
         let entry = Entry::new(consts::APP_NAME, &account.login)?;
         let _ = entry.delete_password();
+
+        let index = self.accounts.iter().position(|item| item == account).unwrap();
+        self.accounts.swap_remove(index);
 
         Ok(())
     }
