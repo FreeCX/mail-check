@@ -35,4 +35,7 @@ pub enum Commands {
         #[arg(short, long)]
         login: String,
     },
+
+    /// Show all accounts
+    Show,
 }

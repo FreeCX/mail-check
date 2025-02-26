@@ -131,4 +131,11 @@ impl Manager {
         }
         Ok(total_unread)
     }
+
+    pub fn print_accounts(&self) -> anyhow::Result<()> {
+        for account in &self.accounts {
+            println!("{}", account.login);
+        }
+        Ok(())
+    }
 }
