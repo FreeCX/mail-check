@@ -24,6 +24,12 @@ pub enum Commands {
         port: u16,
     },
 
+    /// Update password
+    Update {
+        #[arg(short, long)]
+        login: String,
+    },
+
     /// Remove credentials
     Remove {
         #[arg(short, long)]

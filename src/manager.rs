@@ -84,6 +84,21 @@ impl Manager {
         Ok(())
     }
 
+    pub fn update_password(&mut self, login: &String) -> anyhow::Result<()> {
+        let account = self
+            .accounts
+            .iter()
+            .find(|&item| item.login.cmp(login).is_eq())
+            .ok_or(anyhow::anyhow!("Login {login} not found in keyring"))?;
+
+        let entry = Entry::new(consts::APP_NAME, &account.login)?;
+
+        let password = rpassword::prompt_password(format!("Enter new password for {login}: "))?;
+        entry.set_password(&password)?;
+
+        Ok(())
+    }
+
     pub fn remove_account(&mut self, login: &String) -> anyhow::Result<()> {
         let account = self
             .accounts

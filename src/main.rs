@@ -17,6 +17,10 @@ fn app(args: cli::Cli) -> anyhow::Result<()> {
             manager.add_account(login, domain, *port)?;
             manager.save(&args.config)
         }
+        Some(cli::Commands::Update { login }) => {
+            manager.update_password(login)?;
+            manager.save(&args.config)
+        }
         Some(cli::Commands::Remove { login }) => {
             manager.remove_account(login)?;
             manager.save(&args.config)
