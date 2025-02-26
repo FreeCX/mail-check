@@ -107,7 +107,7 @@ impl Manager {
             .ok_or(anyhow::anyhow!("Login {login} not found in keyring"))?;
 
         let entry = Entry::new(consts::APP_NAME, &account.login)?;
-        let _ = entry.delete_password();
+        let _ = entry.delete_credential();
 
         let index = self.accounts.iter().position(|item| item == account).unwrap();
         self.accounts.swap_remove(index);
