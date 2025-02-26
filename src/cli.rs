@@ -38,4 +38,7 @@ pub enum Commands {
 
     /// Show all accounts
     Show,
+
+    /// Check mailboxes
+    Check,
 }

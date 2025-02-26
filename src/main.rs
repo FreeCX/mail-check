@@ -26,7 +26,8 @@ fn app(args: cli::Cli) -> anyhow::Result<()> {
             manager.remove_account(login)?;
             manager.save(&args.config)
         }
-        None => default::default(manager),
+        // checking the mail by default
+        Some(cli::Commands::Check) | None => default::default(manager),
     }
 }
 
